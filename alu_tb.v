@@ -1,24 +1,20 @@
-module RAM_tb;
+module ALU_tb;
 
-reg clk, we;
-reg [2:0] addr;
-reg [7:0] din;
-wire [7:0] dout;
+reg [3:0] A, B;
+reg [2:0] sel;
+wire [3:0] result;
+wire carry;
 
-RAM uut (.clk(clk), .we(we), .addr(addr), .din(din), .dout(dout));
-
-always #5 clk = ~clk;
+ALU uut (.A(A), .B(B), .sel(sel), .result(result), .carry(carry));
 
 initial begin
-    clk = 0;
-    we = 1;
+    A = 4'b0101; B = 4'b0011;
 
-    addr = 3'b001; din = 8'b10101010; #10;
-    addr = 3'b010; din = 8'b11001100; #10;
-
-    we = 0;
-    addr = 3'b001; #10;
-    addr = 3'b010; #10;
+    sel = 3'b000; #10; // ADD
+    sel = 3'b001; #10; // SUB
+    sel = 3'b010; #10; // AND
+    sel = 3'b011; #10; // OR
+    sel = 3'b100; #10; // NOT
 
     $stop;
 end
